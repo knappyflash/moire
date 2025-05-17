@@ -4,31 +4,6 @@ Imports System.Runtime.InteropServices
 Public Class SCREEN_CAPTURE_FORM
 
 
-    '''' These are to allow mouse clicks through the form
-    '<DllImport("user32.dll", SetLastError:=True)>
-    'Private Shared Function SetWindowLong(hWnd As IntPtr, nIndex As Integer, dwNewLong As Integer) As Integer
-    'End Function
-
-    '<DllImport("user32.dll", SetLastError:=True)>
-    'Private Shared Function GetWindowLong(hWnd As IntPtr, nIndex As Integer) As Integer
-    'End Function
-
-    'Protected Overrides Sub OnShown(e As EventArgs)
-    '    MyBase.OnShown(e)
-    '    Set_Window()
-    'End Sub
-
-    'Private Sub Set_Window()
-    '    Dim exStyle As Integer = GetWindowLong(Me.Handle, GWL_EXSTYLE)
-    '    SetWindowLong(Me.Handle, GWL_EXSTYLE, exStyle Or WS_EX_TRANSPARENT Or WS_EX_LAYERED)
-    'End Sub
-    'Private Const GWL_EXSTYLE As Integer = -20
-    'Private Const WS_EX_TRANSPARENT As Integer = &H20
-    'Private Const WS_EX_LAYERED As Integer = &H80000
-
-
-
-
     ''' Listen For Key Press
     Public Delegate Function HookProc(nCode As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
     Public Shared HookDelegate As HookProc
@@ -65,6 +40,10 @@ Public Class SCREEN_CAPTURE_FORM
     Private orangePenThick As New Pen(Color.Orange, 10)
     Private orangePenThin As New Pen(Color.Orange, 2)
 
+    Private ScreenIndexSelected As Integer = 0
+
+    Private ScreenShotImg As Image
+
 
     Private Sub SCREEN_CAPTURE_FORM_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Set Window
@@ -78,9 +57,10 @@ Public Class SCREEN_CAPTURE_FORM
         Me.WindowState = FormWindowState.Maximized
         Me.FormBorderStyle = FormBorderStyle.None
         Me.TopMost = True
-        Me.Bounds = Screen.AllScreens(0).Bounds
+        Me.Bounds = Screen.AllScreens(ScreenIndexSelected).Bounds
         Me.BackColor = Color.FromArgb(red:=1, green:=1, blue:=1)
-        Me.TransparencyKey = Color.FromArgb(red:=1, green:=1, blue:=1)
+        'Me.TransparencyKey = Color.FromArgb(red:=1, green:=1, blue:=1)
+        Me.Opacity = 0.3
         Me.Refresh()
 
         'Set DrawLoopTimer
@@ -104,14 +84,44 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
     Private Sub DrawLoopTimer_Tick(sender As Object, e As EventArgs) Handles DrawLoopTimer.Tick
+        Dim MouseScreenIndex As Integer = GetScreenIndexOfMouse()
+        If MouseScreenIndex <> ScreenIndexSelected Then
+            Switch_To_Screen(MouseScreenIndex)
+            ScreenIndexSelected = MouseScreenIndex
+        End If
         mousePosition = Me.PointToClient(Cursor.Position)
         Me.Invalidate()
         Application.DoEvents()
     End Sub
 
+
+
+    Dim Paint_Action As String = "Show Capture Animation"
     Private Sub SCREEN_CAPTURE_FORM_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
-        Draw_Mouse_Crosshair(e)
-        Draw_Mouse_Border_Animation(e)
+
+        Select Case Paint_Action
+            Case "Show Capture Animation"
+                Draw_Mouse_Border_Animation(e)
+                Draw_Mouse_Crosshair(e)
+            Case "Show Screenshot"
+                Draw_Screenshot_Image(e)
+
+        End Select
+
+    End Sub
+
+    Private Sub Draw_Screenshot_Image(e As PaintEventArgs)
+
+        If ScreenShotImg Is Nothing Then
+            ScreenShotImg = My.Resources.creeper_face
+        End If
+
+        Dim x As Integer = 0
+        Dim y As Integer = 0
+        Dim width As Integer = Me.Width
+        Dim height As Integer = Me.Height
+        e.Graphics.DrawImage(ScreenShotImg, x, y, width, height)
+
     End Sub
 
     Private BorderAnimationCounter As Integer = 0
@@ -202,5 +212,41 @@ Public Class SCREEN_CAPTURE_FORM
         End If
         Return CallNextHookEx(hHook, nCode, wParam, lParam)
     End Function
+
+    Private Sub SCREEN_CAPTURE_FORM_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
+        Me.Invalidate()
+        Dim currentScreen = Screen.FromHandle(Me.Handle).WorkingArea
+        Dim bmp As New Bitmap(currentScreen.Width, currentScreen.Height)
+
+        Using g As Graphics = Graphics.FromImage(bmp)
+            g.CopyFromScreen(currentScreen.Location, Point.Empty, currentScreen.Size)
+        End Using
+
+        ScreenShotImg = bmp
+        Paint_Action = "Show Screenshot"
+        Me.Opacity = 1
+    End Sub
+
+
+
+    Private Function GetScreenIndexOfMouse() As Integer
+        Dim mousePosition As Point = Cursor.Position
+
+        For i As Integer = 0 To Screen.AllScreens.Length - 1
+            If Screen.AllScreens(i).Bounds.Contains(mousePosition) Then
+                Return i ' Returns the index of the screen
+            End If
+        Next
+
+        Return -1 ' Returns -1 if not found (shouldn't happen in normal cases)
+    End Function
+    Private Sub Switch_To_Screen(ByVal ScreenIndex As Integer)
+        Me.WindowState = FormWindowState.Normal
+        Me.Bounds = Screen.AllScreens(ScreenIndex).Bounds
+        Me.WindowState = FormWindowState.Maximized
+        Me.FormBorderStyle = FormBorderStyle.None
+    End Sub
+
+
 
 End Class
