@@ -80,6 +80,12 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ioListener.Designer.vb">
+      <DependentUpon>ioListener.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ioListener.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MAIN_APP_FORM.Designer.vb">
       <DependentUpon>MAIN_APP_FORM.vb</DependentUpon>
     </Compile>
@@ -107,6 +113,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ioListener.resx">
+      <DependentUpon>ioListener.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MAIN_APP_FORM.resx">
       <DependentUpon>MAIN_APP_FORM.vb</DependentUpon>

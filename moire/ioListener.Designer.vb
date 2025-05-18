@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Form1
+Partial Class ioListener
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,30 +22,23 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.PnlApp = New System.Windows.Forms.Panel()
+        Me.components = New System.ComponentModel.Container()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
-        'PnlApp
+        'Timer1
         '
-        Me.PnlApp.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PnlApp.Location = New System.Drawing.Point(12, 12)
-        Me.PnlApp.Name = "PnlApp"
-        Me.PnlApp.Size = New System.Drawing.Size(776, 426)
-        Me.PnlApp.TabIndex = 0
         '
-        'Form1
+        'ioListener
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.PnlApp)
-        Me.Name = "Form1"
-        Me.Text = "moire"
+        Me.Name = "ioListener"
+        Me.Text = "ioListener"
         Me.ResumeLayout(False)
 
     End Sub
 
-    Friend WithEvents PnlApp As Panel
+    Friend WithEvents Timer1 As Timer
 End Class

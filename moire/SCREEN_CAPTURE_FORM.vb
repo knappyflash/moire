@@ -26,8 +26,16 @@ Public Class SCREEN_CAPTURE_FORM
 
     Private Const WM_KEYUP As Integer = &H101
     Private Const WH_KEYBOARD_LL As Integer = 13
-    Private Shared hHook As IntPtr = IntPtr.Zero
 
+
+
+    ' Declare a field to hold the delegate, preventing it from being garbage collected
+    Private Shared hHook As IntPtr = IntPtr.Zero
+    Private keyboardHookDelegate As HookProc
+    Private Sub SetKeyboardHook()
+        keyboardHookDelegate = AddressOf KeyboardHookProc ' Assign delegate before hooking
+        hHook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHookDelegate, IntPtr.Zero, 0)
+    End Sub
 
 
 
@@ -44,6 +52,11 @@ Public Class SCREEN_CAPTURE_FORM
 
     Private ScreenShotImg As Image
 
+    Private captureAreaTopLeft As Point = New Point(0, 0)
+    Private captureAreaBottomRight As Point = New Point(0, 0)
+
+
+    Public Event Capture_Image_Available(img As Image)
 
     Private Sub SCREEN_CAPTURE_FORM_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Set Window
@@ -96,25 +109,21 @@ Public Class SCREEN_CAPTURE_FORM
 
 
 
-    Dim Paint_Action As String = "Show Capture Animation"
+    Dim Paint_Action As String = "Screenshot Started"
     Private Sub SCREEN_CAPTURE_FORM_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
 
         Select Case Paint_Action
-            Case "Show Capture Animation"
+            Case "Screenshot Started"
                 Draw_Mouse_Border_Animation(e)
                 Draw_Mouse_Crosshair(e)
-            Case "Show Screenshot"
+            Case "Take Screenshot"
                 Draw_Screenshot_Image(e)
-
+                Draw_Area_To_Crop(e)
         End Select
 
     End Sub
 
     Private Sub Draw_Screenshot_Image(e As PaintEventArgs)
-
-        If ScreenShotImg Is Nothing Then
-            ScreenShotImg = My.Resources.creeper_face
-        End If
 
         Dim x As Integer = 0
         Dim y As Integer = 0
@@ -203,31 +212,20 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
     Private Function KeyboardHookProc(nCode As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
-        If wParam = CType(WM_KEYUP, IntPtr) Then
-            Dim vkCode As Integer = Marshal.ReadInt32(lParam)
-            If vkCode = Keys.Escape Then
-                Console.WriteLine("Escape Key Realsed")
-                Me.Close()
+        Try
+            If wParam = CType(WM_KEYUP, IntPtr) Then
+                Dim vkCode As Integer = Marshal.ReadInt32(lParam)
+                If vkCode = Keys.Escape Then
+                    Console.WriteLine("Escape Key Realsed")
+                    Me.Close()
+                End If
             End If
-        End If
-        Return CallNextHookEx(hHook, nCode, wParam, lParam)
+            Return CallNextHookEx(hHook, nCode, wParam, lParam)
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+        End Try
+
     End Function
-
-    Private Sub SCREEN_CAPTURE_FORM_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
-        Me.Invalidate()
-        Dim currentScreen = Screen.FromHandle(Me.Handle).WorkingArea
-        Dim bmp As New Bitmap(currentScreen.Width, currentScreen.Height)
-
-        Using g As Graphics = Graphics.FromImage(bmp)
-            g.CopyFromScreen(currentScreen.Location, Point.Empty, currentScreen.Size)
-        End Using
-
-        ScreenShotImg = bmp
-        Paint_Action = "Show Screenshot"
-        Me.Opacity = 1
-    End Sub
-
-
 
     Private Function GetScreenIndexOfMouse() As Integer
         Dim mousePosition As Point = Cursor.Position
@@ -248,5 +246,56 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
 
+    ''' Take the ScreenShot
+    Private Sub SCREEN_CAPTURE_FORM_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
+
+        captureAreaTopLeft = mousePosition
+
+        Paint_Action = "Take Screenshot"
+        Me.Invalidate()
+        Me.Opacity = 0
+        Dim currentScreen = Screen.AllScreens(ScreenIndexSelected).Bounds
+        Dim bmp As New Bitmap(currentScreen.Width, currentScreen.Height)
+
+        Using g As Graphics = Graphics.FromImage(bmp)
+            g.CopyFromScreen(currentScreen.Location, Point.Empty, currentScreen.Size)
+        End Using
+
+        ScreenShotImg = bmp
+
+        Me.Opacity = 1
+
+    End Sub
+
+    Private Sub SCREEN_CAPTURE_FORM_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp
+        captureAreaBottomRight = mousePosition
+        Crop_Image()
+        RaiseEvent Capture_Image_Available(ScreenShotImg)
+        Me.Dispose()
+    End Sub
+
+    Private Sub Draw_Area_To_Crop(e As PaintEventArgs)
+        Dim x As Integer = captureAreaTopLeft.X
+        Dim y As Integer = captureAreaTopLeft.Y
+        Dim width As Integer = mousePosition.X - x
+        Dim height As Integer = mousePosition.Y - y
+        e.Graphics.DrawRectangle(orangePenThin, x, y, width, height)
+    End Sub
+
+    Private Sub Crop_Image()
+        Dim x As Integer = captureAreaTopLeft.X
+        Dim y As Integer = captureAreaTopLeft.Y
+        Dim width As Integer = captureAreaBottomRight.X - x
+        Dim height As Integer = captureAreaBottomRight.Y - y
+
+        Dim cropRect As New Rectangle(x, y, width, height)
+        Dim croppedBmp As New Bitmap(cropRect.Width, cropRect.Height)
+
+        Using g As Graphics = Graphics.FromImage(croppedBmp)
+            g.DrawImage(ScreenShotImg, New Rectangle(0, 0, cropRect.Width, cropRect.Height), cropRect, GraphicsUnit.Pixel)
+        End Using
+
+        ScreenShotImg = croppedBmp
+    End Sub
 
 End Class
