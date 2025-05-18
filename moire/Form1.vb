@@ -3,10 +3,10 @@
 Public Class Form1
 
     Private _MyScreenCapture As SCREEN_CAPTURE_FORM
+    Dim MyioListener As New ioListener
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        ioListener.Show()
-
+        MyioListener.Timer1.Start()
 
         '_MyScreenCapture = New SCREEN_CAPTURE_FORM
         'MAIN_APP_FORM.TopLevel = False

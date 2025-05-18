@@ -11,7 +11,7 @@ Public Class ioListener
     Private Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Integer) As Short
 
     Private Sub ioListener_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Timer1.Start()
+
     End Sub
 
 
