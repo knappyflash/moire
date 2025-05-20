@@ -3,47 +3,6 @@ Imports System.Runtime.InteropServices
 
 Public Class SCREEN_CAPTURE_FORM
 
-
-    ''' Listen For Key Press
-    Public Delegate Function HookProc(nCode As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
-    Public Shared HookDelegate As HookProc
-
-    <DllImport("user32.dll")>
-    Private Shared Function SetWindowsHookEx(idHook As Integer, lpfn As HookProc, hMod As IntPtr, dwThreadId As Integer) As IntPtr
-    End Function
-
-    <DllImport("user32.dll")>
-    Private Shared Function UnhookWindowsHookEx(hHook As IntPtr) As Boolean
-    End Function
-
-    <DllImport("user32.dll")>
-    Private Shared Function CallNextHookEx(hHook As IntPtr, nCode As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
-    End Function
-
-    <DllImport("kernel32.dll")>
-    Private Shared Function GetModuleHandle(lpModuleName As String) As IntPtr
-    End Function
-
-    Private Const WM_KEYUP As Integer = &H101
-    Private Const WH_KEYBOARD_LL As Integer = 13
-
-
-
-    ' Declare a field to hold the delegate, preventing it from being garbage collected
-    Private Shared hHook As IntPtr = IntPtr.Zero
-    Private keyboardHookDelegate As HookProc
-    Private Sub SetKeyboardHook()
-        keyboardHookDelegate = AddressOf KeyboardHookProc ' Assign delegate before hooking
-        hHook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHookDelegate, IntPtr.Zero, 0)
-    End Sub
-
-
-
-
-
-
-
-
     Private mousePosition As Point = Me.PointToClient(Cursor.Position)
     Private orangePenThick As New Pen(Color.Orange, 10)
     Private orangePenThin As New Pen(Color.Orange, 2)
@@ -80,16 +39,8 @@ Public Class SCREEN_CAPTURE_FORM
         DrawLoopTimer.Interval = 16
         DrawLoopTimer.Start()
 
-        ''Set PicBoxBgNoClick
-        'PicBoxBgNoCLick.BackColor = Color.FromArgb(red:=1, blue:=1, green:=1)
-        'PicBoxBgNoCLick.Top = Me.Top
-        'PicBoxBgNoCLick.Left = Me.Left
-        'PicBoxBgNoCLick.Width = Me.Width
-        'PicBoxBgNoCLick.Height = Me.Height
+        AddHandler ioListener.Released_Escape, AddressOf Handle_Key_Escape_Release
 
-        'Listen For Keyboard Hooks
-        HookDelegate = New HookProc(AddressOf KeyboardHookProc)
-        hHook = SetWindowsHookEx(WH_KEYBOARD_LL, HookDelegate, GetModuleHandle(Nothing), 0)
     End Sub
 
     Private Sub SCREEN_CAPTURE_FORM_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -211,22 +162,6 @@ Public Class SCREEN_CAPTURE_FORM
 
     End Sub
 
-    Private Function KeyboardHookProc(nCode As Integer, wParam As IntPtr, lParam As IntPtr) As Integer
-        Try
-            If wParam = CType(WM_KEYUP, IntPtr) Then
-                Dim vkCode As Integer = Marshal.ReadInt32(lParam)
-                If vkCode = Keys.Escape Then
-                    Console.WriteLine("Escape Key Realsed")
-                    Me.Close()
-                End If
-            End If
-            Return CallNextHookEx(hHook, nCode, wParam, lParam)
-        Catch ex As Exception
-            Console.WriteLine(ex.Message)
-        End Try
-
-    End Function
-
     Private Function GetScreenIndexOfMouse() As Integer
         Dim mousePosition As Point = Cursor.Position
 
@@ -271,7 +206,7 @@ Public Class SCREEN_CAPTURE_FORM
         captureAreaBottomRight = mousePosition
         Crop_Image()
         RaiseEvent Capture_Image_Available(ScreenShotImg)
-        Me.Dispose()
+        Me.Close()
     End Sub
 
     Private Sub Draw_Area_To_Crop(e As PaintEventArgs)
@@ -296,6 +231,10 @@ Public Class SCREEN_CAPTURE_FORM
         End Using
 
         ScreenShotImg = croppedBmp
+    End Sub
+
+    Private Sub Handle_Key_Escape_Release()
+        Me.Close()
     End Sub
 
 End Class

@@ -142,10 +142,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\bg_no_click.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\creeper_face.png" />
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

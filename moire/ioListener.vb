@@ -13,9 +13,8 @@ Public Class ioListener
     Public Event Released_LMouse()
     Public Event Released_RMouse()
 
-    Private Sub ioListener_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
+    Public Event ClickDown_LMouse()
+    Public Event ClickDown_RMouse()
 
 
     Private EscapeStillDown As Boolean = False
@@ -23,39 +22,72 @@ Public Class ioListener
     Private LeftMouseStillDown As Boolean = False
     Private RightMouseStillDown As Boolean = False
 
+    Private LeftMouseClickDown As Boolean = False
+    Private RightMouseClickDown As Boolean = False
+
+    Private Sub ioListener_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
     Public Sub Start_Timer()
         Timer1.Start()
     End Sub
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
+        Handle_Keys()
+        Handle_Mouse()
+
+    End Sub
+
+    Private Sub Handle_Keys()
+
         Dim EscapeCurrentState As Boolean = GetAsyncKeyState(Keys.Escape) <> 0
         Dim PrintScreenCurrentState As Boolean = GetAsyncKeyState(Keys.PrintScreen) <> 0
-        Dim LeftMouseCurrentState As Boolean = GetAsyncKeyState(Keys.LButton) <> 0
-        Dim RightMouseCurrentState As Boolean = GetAsyncKeyState(Keys.RButton) <> 0
 
         If EscapeCurrentState Then EscapeStillDown = True
         If PrintScreenCurrentState Then PrintScreenStillDown = True
-        If LeftMouseCurrentState Then LeftMouseStillDown = True
-        If RightMouseCurrentState Then RightMouseStillDown = True
 
+        ''' RELEASE '''
         If EscapeStillDown And Not EscapeCurrentState Then
-            RaiseEvent Released_Escape()
             EscapeStillDown = False
+            RaiseEvent Released_Escape()
         End If
 
         If PrintScreenStillDown And Not PrintScreenCurrentState Then
-            RaiseEvent Released_PrintScreen()
             PrintScreenStillDown = False
+            RaiseEvent Released_PrintScreen()
         End If
 
+    End Sub
+
+    Private Sub Handle_Mouse()
+
+        Dim LeftMouseCurrentState As Boolean = GetAsyncKeyState(Keys.LButton) <> 0
+        Dim RightMouseCurrentState As Boolean = GetAsyncKeyState(Keys.RButton) <> 0
+
+        If LeftMouseCurrentState Then LeftMouseStillDown = True
+        If RightMouseCurrentState Then RightMouseStillDown = True
+
+        ''' FIRST CLICK DOWN ''''
+        If Not LeftMouseClickDown And LeftMouseStillDown Then
+            LeftMouseClickDown = True
+            RaiseEvent ClickDown_LMouse()
+        End If
+        If Not RightMouseClickDown And RightMouseStillDown Then
+            RightMouseClickDown = True
+            RaiseEvent ClickDown_RMouse()
+        End If
+
+        ''' RELEASE '''
         If LeftMouseStillDown And Not LeftMouseCurrentState Then
-            RaiseEvent Released_LMouse()
+            LeftMouseClickDown = False
             LeftMouseStillDown = False
+            RaiseEvent Released_LMouse()
         End If
-
         If RightMouseStillDown And Not RightMouseCurrentState Then
-            RaiseEvent Released_RMouse()
+            RightMouseClickDown = False
             RightMouseStillDown = False
+            RaiseEvent Released_RMouse()
         End If
 
     End Sub
