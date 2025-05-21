@@ -1,0 +1,3 @@
+﻿Public Class FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT
+
+End Class

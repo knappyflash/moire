@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Runtime.InteropServices
+Imports System.Threading
 
 Public Class SCREEN_CAPTURE_FORM
 
@@ -31,11 +32,15 @@ Public Class SCREEN_CAPTURE_FORM
         Me.TopMost = True
         Me.Bounds = Screen.AllScreens(ScreenIndexSelected).Bounds
         Me.BackColor = Color.FromArgb(red:=1, green:=1, blue:=1)
-        'Me.TransparencyKey = Color.FromArgb(red:=1, green:=1, blue:=1)
-        Me.Opacity = 0.3
+        Me.TransparencyKey = Color.FromArgb(red:=1, green:=1, blue:=1)
+        Me.Opacity = 1
         Me.Refresh()
 
-        'Set DrawLoopTimer
+
+        Create_Freeze_Window_Screens()
+
+
+        ''Set DrawLoopTimer
         DrawLoopTimer.Interval = 16
         DrawLoopTimer.Start()
 
@@ -52,6 +57,7 @@ Public Class SCREEN_CAPTURE_FORM
         If MouseScreenIndex <> ScreenIndexSelected Then
             Switch_To_Screen(MouseScreenIndex)
             ScreenIndexSelected = MouseScreenIndex
+            Console.WriteLine($"{Now} Screen Index Selected: {ScreenIndexSelected}")
         End If
         mousePosition = Me.PointToClient(Cursor.Position)
         Me.Invalidate()
@@ -235,6 +241,28 @@ Public Class SCREEN_CAPTURE_FORM
 
     Private Sub Handle_Key_Escape_Release()
         Me.Close()
+    End Sub
+
+    Private Sub Create_Freeze_Window_Screens()
+        Console.WriteLine($"{Now} Creating_Freeze_Window_Screens!")
+
+        Dim screens() As Screen = Screen.AllScreens
+
+        Dim sortedScreens() As Screen = screens.OrderBy(Function(s) s.Bounds.X).ToArray()
+
+        ' Output sorted monitors based on Physical position Left to Right
+        For i As Integer = 0 To sortedScreens.Length - 1
+            Dim currentScreen As Screen = sortedScreens(i)
+            Console.WriteLine($"   Monitor {i}: {sortedScreens(i).DeviceName}")
+            Console.WriteLine($"   Resolution: {currentScreen.Bounds.Width} x {currentScreen.Bounds.Height}")
+            Console.WriteLine($"   Working Area: {currentScreen.WorkingArea.Width} x {currentScreen.WorkingArea.Height}")
+            Console.WriteLine($"   X Position: {currentScreen.Bounds.X}")
+            Console.WriteLine()
+
+            ''' Create The Collections Of FREEZE_WINDOW_IMAGE_OBJECTS WITH EACH OBJECT HAVING A SCREEN SHOT OF THAT SCREEN BEHIND THIS ME.OBJECT'''
+
+        Next
+
     End Sub
 
 End Class

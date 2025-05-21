@@ -36,5 +36,4 @@ Public Class MAIN_APP_FORM
         _MyScreenCapture.Show()
     End Sub
 
-
 End Class

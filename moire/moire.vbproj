@@ -80,6 +80,12 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.Designer.vb">
+      <DependentUpon>FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ioListener.Designer.vb">
       <DependentUpon>ioListener.vb</DependentUpon>
     </Compile>
