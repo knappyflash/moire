@@ -98,6 +98,12 @@
     <Compile Include="MAIN_APP_FORM.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="moire_image_file.Designer.vb">
+      <DependentUpon>moire_image_file.vb</DependentUpon>
+    </Compile>
+    <Compile Include="moire_image_file.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -120,11 +126,17 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.resx">
+      <DependentUpon>FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ioListener.resx">
       <DependentUpon>ioListener.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MAIN_APP_FORM.resx">
       <DependentUpon>MAIN_APP_FORM.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="moire_image_file.resx">
+      <DependentUpon>moire_image_file.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

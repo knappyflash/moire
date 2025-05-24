@@ -15,8 +15,15 @@ Public Class SCREEN_CAPTURE_FORM
     Private captureAreaTopLeft As Point = New Point(0, 0)
     Private captureAreaBottomRight As Point = New Point(0, 0)
 
+    Private FreezeScreens As New Dictionary(Of Integer, FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT)
 
     Public Event Capture_Image_Available(img As Image)
+
+    Private Enum _PaintAction
+        Do_Nothing = 0
+        Screenshot_Started = 1
+        Take_Screenshot = 2
+    End Enum
 
     Private Sub SCREEN_CAPTURE_FORM_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Set Window
@@ -60,33 +67,30 @@ Public Class SCREEN_CAPTURE_FORM
             Console.WriteLine($"{Now} Screen Index Selected: {ScreenIndexSelected}")
         End If
         mousePosition = Me.PointToClient(Cursor.Position)
+
         Me.Invalidate()
         Application.DoEvents()
     End Sub
 
 
 
-    Dim Paint_Action As String = "Screenshot Started"
+    Dim Paint_Action As Integer = _PaintAction.Do_Nothing
+
+    Private Sub MyInvalidater(PaintAction As _PaintAction)
+        Paint_Action = PaintAction
+        Me.Invalidate()
+        My.Application.DoEvents()
+    End Sub
     Private Sub SCREEN_CAPTURE_FORM_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
 
         Select Case Paint_Action
-            Case "Screenshot Started"
+            Case _PaintAction.Do_Nothing
+            Case _PaintAction.Screenshot_Started
                 Draw_Mouse_Border_Animation(e)
                 Draw_Mouse_Crosshair(e)
-            Case "Take Screenshot"
-                Draw_Screenshot_Image(e)
+            Case _PaintAction.Take_Screenshot
                 Draw_Area_To_Crop(e)
         End Select
-
-    End Sub
-
-    Private Sub Draw_Screenshot_Image(e As PaintEventArgs)
-
-        Dim x As Integer = 0
-        Dim y As Integer = 0
-        Dim width As Integer = Me.Width
-        Dim height As Integer = Me.Height
-        e.Graphics.DrawImage(ScreenShotImg, x, y, width, height)
 
     End Sub
 
@@ -192,9 +196,9 @@ Public Class SCREEN_CAPTURE_FORM
 
         captureAreaTopLeft = mousePosition
 
-        Paint_Action = "Take Screenshot"
-        Me.Invalidate()
-        Me.Opacity = 0
+        MyInvalidater(_PaintAction.Take_Screenshot)
+
+        Me.Hide()
         Dim currentScreen = Screen.AllScreens(ScreenIndexSelected).Bounds
         Dim bmp As New Bitmap(currentScreen.Width, currentScreen.Height)
 
@@ -204,7 +208,7 @@ Public Class SCREEN_CAPTURE_FORM
 
         ScreenShotImg = bmp
 
-        Me.Opacity = 1
+        Me.Show()
 
     End Sub
 
@@ -212,6 +216,7 @@ Public Class SCREEN_CAPTURE_FORM
         captureAreaBottomRight = mousePosition
         Crop_Image()
         RaiseEvent Capture_Image_Available(ScreenShotImg)
+        Close_All_FreezeScreens()
         Me.Close()
     End Sub
 
@@ -240,29 +245,49 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
     Private Sub Handle_Key_Escape_Release()
+        Close_All_FreezeScreens()
         Me.Close()
     End Sub
 
     Private Sub Create_Freeze_Window_Screens()
+
+        MyInvalidater(_PaintAction.Do_Nothing)
+
         Console.WriteLine($"{Now} Creating_Freeze_Window_Screens!")
 
         Dim screens() As Screen = Screen.AllScreens
 
-        Dim sortedScreens() As Screen = screens.OrderBy(Function(s) s.Bounds.X).ToArray()
-
         ' Output sorted monitors based on Physical position Left to Right
-        For i As Integer = 0 To sortedScreens.Length - 1
-            Dim currentScreen As Screen = sortedScreens(i)
-            Console.WriteLine($"   Monitor {i}: {sortedScreens(i).DeviceName}")
+        'Dim sortedScreens() As Screen = screens.OrderBy(Function(s) s.Bounds.X).ToArray()
+
+        ''' Create The Collections Of FREEZE_WINDOW_IMAGE_OBJECTS WITH EACH OBJECT HAVING A SCREEN SHOT OF THAT SCREEN BEHIND THIS ME.OBJECT'''
+        Dim ScreenCounter As Integer = 0
+        For i As Integer = 0 To screens.Length - 1
+            Dim currentScreen As Screen = screens(i)
+            Console.WriteLine($"   Monitor {i}: {currentScreen.DeviceName}")
             Console.WriteLine($"   Resolution: {currentScreen.Bounds.Width} x {currentScreen.Bounds.Height}")
             Console.WriteLine($"   Working Area: {currentScreen.WorkingArea.Width} x {currentScreen.WorkingArea.Height}")
             Console.WriteLine($"   X Position: {currentScreen.Bounds.X}")
             Console.WriteLine()
 
-            ''' Create The Collections Of FREEZE_WINDOW_IMAGE_OBJECTS WITH EACH OBJECT HAVING A SCREEN SHOT OF THAT SCREEN BEHIND THIS ME.OBJECT'''
+            FreezeScreens.Add(ScreenCounter, New FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT)
+            FreezeScreens(i).MyScreen = currentScreen
+            FreezeScreens(i).ThisScreenIndex = i
+            FreezeScreens(i).Show()
+
+            ScreenCounter = ScreenCounter + 1
 
         Next
 
+        MyInvalidater(_PaintAction.Screenshot_Started)
+
+    End Sub
+
+    Private Sub Close_All_FreezeScreens()
+        For Each kvp As KeyValuePair(Of Integer, FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT) In FreezeScreens
+            FreezeScreens(kvp.Key).Close()
+        Next
+        FreezeScreens.Clear()
     End Sub
 
 End Class
