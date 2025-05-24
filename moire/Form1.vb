@@ -20,8 +20,7 @@ Public Class Form1
     End Sub
 
     Private Sub QuickTest()
-        Dim mif As New moire_image_file
-        Console.WriteLine(mif.Generate_File_Name)
+
     End Sub
 
 End Class

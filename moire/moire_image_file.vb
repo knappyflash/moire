@@ -9,10 +9,13 @@
 
 
 
+Imports System.Text.Json
 Imports System.IO
+
 Public Class moire_image_file
 
     Private _MyScreenCapture As SCREEN_CAPTURE_FORM
+    Private mifData As New mif_data
 
     Private _image As Image
     Private _FileName As String
@@ -38,10 +41,15 @@ Public Class moire_image_file
     End Sub
 
     Public Sub WriteTempJson()
-
+        Console.WriteLine($"mifData.image_name: {mifData.image_name}")
+        Dim savePath As String = $"{Application.StartupPath}\temp\output.json"
+        Dim jsonString As String = JsonSerializer.Serialize(mifData)
+        File.WriteAllText(savePath, jsonString)
     End Sub
 
-    Public Sub WriteMifFile(ByVal imagePath As String, ByVal jsonPath As String, ByVal mifPath As String)
+    Public Sub WriteMifFile(ByVal mifPath As String)
+        Dim imagePath As String = $"{Application.StartupPath}\temp\output.png"
+        Dim jsonPath As String = $"{Application.StartupPath}\temp\output.json"
         Using fs As New FileStream(mifPath, FileMode.Create, FileAccess.Write)
             Using bw As New BinaryWriter(fs)
                 Dim imageBytes As Byte() = File.ReadAllBytes(imagePath)
@@ -73,14 +81,23 @@ Public Class moire_image_file
         End Using
     End Sub
 
-    Public Function Generate_File_Name() As String
-        Return $"mif_{Format(Now, "mmyydd_hhmmss")}.mif"
-    End Function
-
     Private Sub Handle_Image_Available(img)
         _image = img
         Me.Invalidate()
+
+        QuickTest()
+
+    End Sub
+
+    Private Sub QuickTest()
+
+        ''' This is for testing the save files. When reading the .mif file the .json and .png should get saved to temp folder instead
+
+        mifData.image_name = $"mif_{Format(Now, "mmyydd_hhmmss")}"
         WriteTempPng()
+        WriteTempJson()
+        WriteMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif")
+        ReadMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif", $"{Application.StartupPath}\mifs\test.png", $"{Application.StartupPath}\mifs\test.json")
     End Sub
 
     Private Sub moire_image_file_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
@@ -120,4 +137,33 @@ Public Class moire_image_file
     Private Sub moire_image_file_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Me.Invalidate()
     End Sub
+End Class
+
+Public Class mif_data
+    Public _image_name As String
+    Public _test As New Dictionary(Of String, String)
+
+    Public Sub New()
+        _test.Add("Hello", "World")
+        _test.Add("TEST2", "TEST2")
+    End Sub
+
+    Public Property image_name As String
+        Get
+            Return _image_name
+        End Get
+        Set(value As String)
+            _image_name = value
+        End Set
+    End Property
+
+    Public Property test As Dictionary(Of String, String)
+        Get
+            Return _test
+        End Get
+        Set(value As Dictionary(Of String, String))
+            _test = value
+        End Set
+    End Property
+
 End Class
