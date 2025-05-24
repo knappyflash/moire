@@ -1,10 +1,25 @@
 ﻿''' Save current .png file and .json file to the temp folder as temp.png and temp.json
 ''' After that create the .mif file from the temp.png and temp.json files. and save the .mif to the mifs folder
+''' 
+''' This object will store all the images for this mif image, the available thumbnail for the filmstrip selector,
+''' the added shapes, text, highlights, ect,
+''' the path of the .mif file,
+''' basically all info related to the .mif file
+''' 
+
 
 
 Imports System.IO
 Public Class moire_image_file
     Private Sub moire_image_file_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Public Sub WriteTempPng()
+
+    End Sub
+
+    Public Sub WriteTempJson()
 
     End Sub
 

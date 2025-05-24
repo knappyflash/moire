@@ -44,7 +44,7 @@ Partial Class MAIN_APP_FORM
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.Location = New System.Drawing.Point(12, 37)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(776, 401)
+        Me.PictureBox1.Size = New System.Drawing.Size(776, 309)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 1
         Me.PictureBox1.TabStop = False
