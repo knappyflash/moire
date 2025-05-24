@@ -12,8 +12,17 @@ Public Class SCREEN_CAPTURE_FORM
 
     Private ScreenShotImg As Image
 
-    Private captureAreaTopLeft As Point = New Point(0, 0)
-    Private captureAreaBottomRight As Point = New Point(0, 0)
+    Private captureAreaX As Integer
+    Private captureAreaY As Integer
+    Private captureAreaWidth As Integer = 0
+    Private captureAreaHeight As Integer = 0
+
+    Private cropRectX As Integer
+    Private cropRectY As Integer
+    Private cropRectWidth As Integer
+    Private cropRectHeight As Integer
+    Private startPointX As Integer
+    Private StartPointY As Integer
 
     Private FreezeScreens As New Dictionary(Of Integer, FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT)
 
@@ -194,7 +203,10 @@ Public Class SCREEN_CAPTURE_FORM
     ''' Take the ScreenShot
     Private Sub SCREEN_CAPTURE_FORM_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
-        captureAreaTopLeft = mousePosition
+        cropRectX = mousePosition.X
+        cropRectY = mousePosition.Y
+        startPointX = cropRectX
+        StartPointY = cropRectY
 
         MyInvalidater(_PaintAction.Take_Screenshot)
 
@@ -213,7 +225,6 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
     Private Sub SCREEN_CAPTURE_FORM_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp
-        captureAreaBottomRight = mousePosition
         Crop_Image()
         RaiseEvent Capture_Image_Available(ScreenShotImg)
         Close_All_FreezeScreens()
@@ -221,21 +232,28 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
     Private Sub Draw_Area_To_Crop(e As PaintEventArgs)
-        Dim x As Integer = captureAreaTopLeft.X
-        Dim y As Integer = captureAreaTopLeft.Y
-        Dim width As Integer = mousePosition.X - x
-        Dim height As Integer = mousePosition.Y - y
-        e.Graphics.DrawRectangle(orangePenThin, x, y, width, height)
+
+        cropRectX = Math.Min(startPointX, mousePosition.X)
+        cropRectY = Math.Min(startPointY, mousePosition.Y)
+        cropRectWidth = Math.Abs(mousePosition.X - startPointX)
+        cropRectHeight = Math.Abs(mousePosition.Y - startPointY)
+
+        e.Graphics.DrawRectangle(orangePenThin, cropRectX, cropRectY, cropRectWidth, cropRectHeight)
+
     End Sub
 
     Private Sub Crop_Image()
-        Dim x As Integer = captureAreaTopLeft.X
-        Dim y As Integer = captureAreaTopLeft.Y
-        Dim width As Integer = captureAreaBottomRight.X - x
-        Dim height As Integer = captureAreaBottomRight.Y - y
 
-        Dim cropRect As New Rectangle(x, y, width, height)
-        Dim croppedBmp As New Bitmap(cropRect.Width, cropRect.Height)
+        Dim cropRect As Rectangle
+        Dim croppedBmp As Bitmap
+
+        Try
+            cropRect = New Rectangle(cropRectX, cropRectY, cropRectWidth, cropRectHeight)
+            croppedBmp = New Bitmap(cropRect.Width, cropRect.Height)
+        Catch ex As Exception
+            cropRect = New Rectangle(0, 0, Me.Width, Me.Height)
+            croppedBmp = New Bitmap(cropRect.Width, cropRect.Height)
+        End Try
 
         Using g As Graphics = Graphics.FromImage(croppedBmp)
             g.DrawImage(ScreenShotImg, New Rectangle(0, 0, cropRect.Width, cropRect.Height), cropRect, GraphicsUnit.Pixel)
@@ -288,6 +306,23 @@ Public Class SCREEN_CAPTURE_FORM
             FreezeScreens(kvp.Key).Close()
         Next
         FreezeScreens.Clear()
+    End Sub
+
+    Private Sub Use_Entier_Screen()
+        Dim x As Integer = 0
+        Dim y As Integer = 0
+
+        Dim width As Integer = Me.Width
+        Dim height As Integer = Me.Height
+
+        Dim cropRect As New Rectangle(x, y, width, height)
+        Dim croppedBmp As New Bitmap(cropRect.Width, cropRect.Height)
+
+        Using g As Graphics = Graphics.FromImage(croppedBmp)
+            g.DrawImage(ScreenShotImg, New Rectangle(0, 0, cropRect.Width, cropRect.Height), cropRect, GraphicsUnit.Pixel)
+        End Using
+
+        ScreenShotImg = croppedBmp
     End Sub
 
 End Class

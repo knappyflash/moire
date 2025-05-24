@@ -11,12 +11,30 @@
 
 Imports System.IO
 Public Class moire_image_file
+
+    Private _MyScreenCapture As SCREEN_CAPTURE_FORM
+
+    Private _image As Image
+    Private _FileName As String
+
+    Public Property ScreenCapture As SCREEN_CAPTURE_FORM
+        Get
+            Return _MyScreenCapture
+        End Get
+        Set(value As SCREEN_CAPTURE_FORM)
+            _MyScreenCapture = value
+            AddHandler _MyScreenCapture.Capture_Image_Available, AddressOf Handle_Image_Available
+        End Set
+    End Property
+
+
     Private Sub moire_image_file_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
     End Sub
 
     Public Sub WriteTempPng()
-
+        Dim savePath As String = $"{Application.StartupPath}\temp\output.png"
+        _image.Save(savePath, Imaging.ImageFormat.Png)
     End Sub
 
     Public Sub WriteTempJson()
@@ -55,6 +73,51 @@ Public Class moire_image_file
         End Using
     End Sub
 
+    Public Function Generate_File_Name() As String
+        Return $"mif_{Format(Now, "mmyydd_hhmmss")}.mif"
+    End Function
 
+    Private Sub Handle_Image_Available(img)
+        _image = img
+        Me.Invalidate()
+        WriteTempPng()
+    End Sub
 
+    Private Sub moire_image_file_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+        Paint_Image(e)
+    End Sub
+
+    Private Sub Paint_Image(e As PaintEventArgs)
+        If _image IsNot Nothing Then
+            Dim width As Integer = Me.Width
+            Dim height As Integer = Me.Height
+            Dim imgWidth As Integer = _image.Width
+            Dim imgHeight As Integer = _image.Height
+
+            ' Calculate the aspect ratio
+            Dim imgRatio As Double = imgWidth / imgHeight
+            Dim panelRatio As Double = width / height
+            Dim newWidth, newHeight As Integer
+
+            If panelRatio > imgRatio Then
+                ' Panel is wider than the image, fit height
+                newHeight = height
+                newWidth = CInt(imgRatio * height)
+            Else
+                ' Panel is taller than the image, fit width
+                newWidth = width
+                newHeight = CInt(width / imgRatio)
+            End If
+
+            ' Center the image in the panel
+            Dim x As Integer = (width - newWidth) \ 2
+            Dim y As Integer = (height - newHeight) \ 2
+
+            e.Graphics.DrawImage(_image, x, y, newWidth, newHeight)
+        End If
+    End Sub
+
+    Private Sub moire_image_file_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        Me.Invalidate()
+    End Sub
 End Class

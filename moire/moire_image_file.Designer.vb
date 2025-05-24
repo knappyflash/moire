@@ -29,7 +29,14 @@ Partial Class moire_image_file
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ControlBox = False
+        Me.DoubleBuffered = True
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "moire_image_file"
+        Me.ShowIcon = False
+        Me.ShowInTaskbar = False
         Me.Text = "moire_image_file"
         Me.ResumeLayout(False)
 
