@@ -1,4 +1,5 @@
-﻿''' Save current .png file and .json file to the temp folder as temp.png and temp.json
+﻿''' instead of saving the .png and .json files first, try to just load the image (png) and string (json) then write the mif byte() from the image and string data
+''' Save current .png file and .json file to the temp folder as temp.png and temp.json
 ''' After that create the .mif file from the temp.png and temp.json files. and save the .mif to the mifs folder
 ''' 
 ''' This object will store all the images for this mif image, the available thumbnail for the filmstrip selector,
@@ -94,6 +95,7 @@ Public Class moire_image_file
         ''' This is for testing the save files. When reading the .mif file the .json and .png should get saved to temp folder instead
 
         mifData.image_name = $"mif_{Format(Now, "mmyydd_hhmmss")}"
+        mifData.image_date = Now
         WriteTempPng()
         WriteTempJson()
         WriteMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif")
@@ -140,9 +142,9 @@ Public Class moire_image_file
 End Class
 
 Public Class mif_data
-    Public _image_name As String
-    Public _test As New Dictionary(Of String, String)
-
+    Private _image_name As String
+    Private _test As New Dictionary(Of String, String)
+    Private _image_date As Date
     Public Sub New()
         _test.Add("Hello", "World")
         _test.Add("TEST2", "TEST2")
@@ -163,6 +165,15 @@ Public Class mif_data
         End Get
         Set(value As Dictionary(Of String, String))
             _test = value
+        End Set
+    End Property
+
+    Public Property image_date As String
+        Get
+            Return _image_date
+        End Get
+        Set(value As String)
+            _image_date = value
         End Set
     End Property
 
