@@ -1,15 +1,4 @@
-﻿''' instead of saving the .png and .json files first, try to just load the image (png) and string (json) then write the mif byte() from the image and string data
-''' Save current .png file and .json file to the temp folder as temp.png and temp.json
-''' After that create the .mif file from the temp.png and temp.json files. and save the .mif to the mifs folder
-''' 
-''' This object will store all the images for this mif image, the available thumbnail for the filmstrip selector,
-''' the added shapes, text, highlights, ect,
-''' the path of the .mif file,
-''' basically all info related to the .mif file
-''' 
-
-
-
+﻿
 Imports System.Text.Json
 Imports System.IO
 
@@ -20,6 +9,8 @@ Public Class moire_image_file
 
     Private _image As Image
     Private _FileName As String
+
+    Private jsonString As String
 
     Public Property ScreenCapture As SCREEN_CAPTURE_FORM
         Get
@@ -36,25 +27,13 @@ Public Class moire_image_file
 
     End Sub
 
-    Public Sub WriteTempPng()
-        Dim savePath As String = $"{Application.StartupPath}\temp\output.png"
-        _image.Save(savePath, Imaging.ImageFormat.Png)
-    End Sub
-
-    Public Sub WriteTempJson()
-        Console.WriteLine($"mifData.image_name: {mifData.image_name}")
-        Dim savePath As String = $"{Application.StartupPath}\temp\output.json"
-        Dim jsonString As String = JsonSerializer.Serialize(mifData)
-        File.WriteAllText(savePath, jsonString)
-    End Sub
-
     Public Sub WriteMifFile(ByVal mifPath As String)
-        Dim imagePath As String = $"{Application.StartupPath}\temp\output.png"
-        Dim jsonPath As String = $"{Application.StartupPath}\temp\output.json"
         Using fs As New FileStream(mifPath, FileMode.Create, FileAccess.Write)
             Using bw As New BinaryWriter(fs)
-                Dim imageBytes As Byte() = File.ReadAllBytes(imagePath)
-                Dim jsonBytes As Byte() = File.ReadAllBytes(jsonPath)
+                Dim ms As New MemoryStream()
+                _image.Save(ms, Imaging.ImageFormat.Png)
+                Dim imageBytes As Byte() = ms.ToArray()
+                Dim jsonBytes As Byte() = System.Text.Encoding.UTF8.GetBytes(jsonString)
 
                 bw.Write(System.Text.Encoding.UTF8.GetBytes("MIF1")) ' Magic identifier
                 bw.Write(imageBytes.Length)
@@ -91,13 +70,9 @@ Public Class moire_image_file
     End Sub
 
     Private Sub QuickTest()
-
-        ''' This is for testing the save files. When reading the .mif file the .json and .png should get saved to temp folder instead
-
         mifData.image_name = $"mif_{Format(Now, "mmyydd_hhmmss")}"
         mifData.image_date = Now
-        WriteTempPng()
-        WriteTempJson()
+        jsonString = JsonSerializer.Serialize(mifData)
         WriteMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif")
         ReadMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif", $"{Application.StartupPath}\mifs\test.png", $"{Application.StartupPath}\mifs\test.json")
     End Sub

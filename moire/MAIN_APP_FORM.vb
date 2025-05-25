@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.IO
+Imports System.Runtime.InteropServices
 
 Public Class MAIN_APP_FORM
 
@@ -9,6 +10,8 @@ Public Class MAIN_APP_FORM
         InitMe()
         Show_Mif_In_Panel()
         AddHandler ioListener.Released_PrintScreen, AddressOf Handle_Key_PrintScreen_Release
+
+        Load_Timeline()
 
     End Sub
 
@@ -44,6 +47,32 @@ Public Class MAIN_APP_FORM
         _ScreenCapture = New SCREEN_CAPTURE_FORM
         _mif.ScreenCapture = _ScreenCapture
         _ScreenCapture.Show()
+    End Sub
+
+    Private Sub Load_Timeline()
+
+        Dim rnd As New Random()
+
+        Console.WriteLine($"{Application.StartupPath}\mifs\*.mif")
+
+        PanelTimeLine.AutoScroll = True
+        PanelTimeLine.HorizontalScroll.Visible = True ' Forces scrollbar to be shown
+        PanelTimeLine.Width = PnlMIF.Width
+        FlowLayoutPanelTimeLine.FlowDirection = FlowDirection.LeftToRight
+        FlowLayoutPanelTimeLine.WrapContents = False
+        FlowLayoutPanelTimeLine.Width = PanelTimeLine.Width * 2 ' Make it wider to trigger scrollbar
+
+
+        For Each file As String In Directory.GetFiles($"{Application.StartupPath}\mifs", "*.mif")
+            Console.WriteLine($"Found image file: {file}")
+            Dim Pbox As New PictureBox
+            Dim randomColor As Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256))
+            Pbox.BackColor = randomColor
+            Pbox.BorderStyle = BorderStyle.FixedSingle
+            Pbox.Height = FlowLayoutPanelTimeLine.Height - 8
+            FlowLayoutPanelTimeLine.Controls.Add(Pbox)
+        Next
+
     End Sub
 
 End Class

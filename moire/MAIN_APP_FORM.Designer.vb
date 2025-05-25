@@ -24,6 +24,9 @@ Partial Class MAIN_APP_FORM
     Private Sub InitializeComponent()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.PnlMIF = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanelTimeLine = New System.Windows.Forms.FlowLayoutPanel()
+        Me.PanelTimeLine = New System.Windows.Forms.Panel()
+        Me.PanelTimeLine.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -41,10 +44,33 @@ Partial Class MAIN_APP_FORM
         Me.PnlMIF.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PnlMIF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PnlMIF.Location = New System.Drawing.Point(15, 28)
         Me.PnlMIF.Name = "PnlMIF"
-        Me.PnlMIF.Size = New System.Drawing.Size(773, 329)
+        Me.PnlMIF.Size = New System.Drawing.Size(773, 290)
         Me.PnlMIF.TabIndex = 1
+        '
+        'FlowLayoutPanelTimeLine
+        '
+        Me.FlowLayoutPanelTimeLine.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.FlowLayoutPanelTimeLine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.FlowLayoutPanelTimeLine.Location = New System.Drawing.Point(3, 3)
+        Me.FlowLayoutPanelTimeLine.Name = "FlowLayoutPanelTimeLine"
+        Me.FlowLayoutPanelTimeLine.Size = New System.Drawing.Size(1286, 83)
+        Me.FlowLayoutPanelTimeLine.TabIndex = 2
+        '
+        'PanelTimeLine
+        '
+        Me.PanelTimeLine.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelTimeLine.AutoScroll = True
+        Me.PanelTimeLine.Controls.Add(Me.FlowLayoutPanelTimeLine)
+        Me.PanelTimeLine.Location = New System.Drawing.Point(15, 324)
+        Me.PanelTimeLine.Name = "PanelTimeLine"
+        Me.PanelTimeLine.Size = New System.Drawing.Size(773, 114)
+        Me.PanelTimeLine.TabIndex = 3
         '
         'MAIN_APP_FORM
         '
@@ -53,6 +79,7 @@ Partial Class MAIN_APP_FORM
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.ControlBox = False
+        Me.Controls.Add(Me.PanelTimeLine)
         Me.Controls.Add(Me.PnlMIF)
         Me.Controls.Add(Me.Label1)
         Me.DoubleBuffered = True
@@ -64,6 +91,7 @@ Partial Class MAIN_APP_FORM
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "MAIN_APP_FORM"
+        Me.PanelTimeLine.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -71,4 +99,6 @@ Partial Class MAIN_APP_FORM
 
     Friend WithEvents Label1 As Label
     Friend WithEvents PnlMIF As Panel
+    Friend WithEvents FlowLayoutPanelTimeLine As FlowLayoutPanel
+    Friend WithEvents PanelTimeLine As Panel
 End Class
