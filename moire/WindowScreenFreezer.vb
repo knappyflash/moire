@@ -1,6 +1,6 @@
 ﻿Imports System.Drawing.Printing
 
-Public Class FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT
+Public Class WindowScreenFreezer
 
     Public ThisScreenIndex As Integer
     Public MyScreen As Screen

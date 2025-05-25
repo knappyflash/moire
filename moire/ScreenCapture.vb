@@ -2,7 +2,7 @@
 Imports System.Runtime.InteropServices
 Imports System.Threading
 
-Public Class SCREEN_CAPTURE_FORM
+Public Class ScreenCapture
 
     Private mousePosition As Point = Me.PointToClient(Cursor.Position)
     Private orangePenThick As New Pen(Color.Orange, 10)
@@ -24,7 +24,7 @@ Public Class SCREEN_CAPTURE_FORM
     Private startPointX As Integer
     Private StartPointY As Integer
 
-    Private FreezeScreens As New Dictionary(Of Integer, FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT)
+    Private FreezeScreens As New Dictionary(Of Integer, WindowScreenFreezer)
 
     Public Event Capture_Image_Available(img As Image)
 
@@ -288,7 +288,7 @@ Public Class SCREEN_CAPTURE_FORM
             Console.WriteLine($"   X Position: {currentScreen.Bounds.X}")
             Console.WriteLine()
 
-            FreezeScreens.Add(ScreenCounter, New FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT)
+            FreezeScreens.Add(ScreenCounter, New WindowScreenFreezer)
             FreezeScreens(i).MyScreen = currentScreen
             FreezeScreens(i).ThisScreenIndex = i
             FreezeScreens(i).Show()
@@ -302,7 +302,7 @@ Public Class SCREEN_CAPTURE_FORM
     End Sub
 
     Private Sub Close_All_FreezeScreens()
-        For Each kvp As KeyValuePair(Of Integer, FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT) In FreezeScreens
+        For Each kvp As KeyValuePair(Of Integer, WindowScreenFreezer) In FreezeScreens
             FreezeScreens(kvp.Key).Close()
         Next
         FreezeScreens.Clear()

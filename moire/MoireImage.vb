@@ -2,28 +2,27 @@
 Imports System.Text.Json
 Imports System.IO
 
-Public Class moire_image_file
+Public Class MoireImage
 
-    Private _MyScreenCapture As SCREEN_CAPTURE_FORM
-    Private mifData As New mif_data
-
+    Private _myScreenCapture As ScreenCapture
+    Private _mifData As New MifData
     Private _image As Image
-    Private _FileName As String
+    Private _thumbnail As Image
+    Private _fileName As String
+    Private _jsonString As String
 
-    Private jsonString As String
-
-    Public Property ScreenCapture As SCREEN_CAPTURE_FORM
+    Public Property ScreenCapture As ScreenCapture
         Get
-            Return _MyScreenCapture
+            Return _myScreenCapture
         End Get
-        Set(value As SCREEN_CAPTURE_FORM)
-            _MyScreenCapture = value
-            AddHandler _MyScreenCapture.Capture_Image_Available, AddressOf Handle_Image_Available
+        Set(value As ScreenCapture)
+            _myScreenCapture = value
+            AddHandler _myScreenCapture.Capture_Image_Available, AddressOf HandleImageAvailable
         End Set
     End Property
 
 
-    Private Sub moire_image_file_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub MoireImageLoad(sender As Object, e As EventArgs) Handles MyBase.Load
 
     End Sub
 
@@ -33,7 +32,7 @@ Public Class moire_image_file
                 Dim ms As New MemoryStream()
                 _image.Save(ms, Imaging.ImageFormat.Png)
                 Dim imageBytes As Byte() = ms.ToArray()
-                Dim jsonBytes As Byte() = System.Text.Encoding.UTF8.GetBytes(jsonString)
+                Dim jsonBytes As Byte() = System.Text.Encoding.UTF8.GetBytes(_jsonString)
 
                 bw.Write(System.Text.Encoding.UTF8.GetBytes("MIF1")) ' Magic identifier
                 bw.Write(imageBytes.Length)
@@ -61,7 +60,7 @@ Public Class moire_image_file
         End Using
     End Sub
 
-    Private Sub Handle_Image_Available(img)
+    Private Sub HandleImageAvailable(img)
         _image = img
         Me.Invalidate()
 
@@ -70,18 +69,18 @@ Public Class moire_image_file
     End Sub
 
     Private Sub QuickTest()
-        mifData.image_name = $"mif_{Format(Now, "mmyydd_hhmmss")}"
-        mifData.image_date = Now
-        jsonString = JsonSerializer.Serialize(mifData)
-        WriteMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif")
-        ReadMifFile($"{Application.StartupPath}\mifs\{mifData.image_name}.mif", $"{Application.StartupPath}\mifs\test.png", $"{Application.StartupPath}\mifs\test.json")
+        _mifData.ImageName = $"mif_{Format(Now, "mmyydd_hhmmss")}"
+        _mifData.ImageDate = Now
+        _jsonString = JsonSerializer.Serialize(_mifData)
+        WriteMifFile($"{Application.StartupPath}\mifs\{_mifData.ImageName}.mif")
+        ReadMifFile($"{Application.StartupPath}\mifs\{_mifData.ImageName}.mif", $"{Application.StartupPath}\mifs\test.png", $"{Application.StartupPath}\mifs\test.json")
     End Sub
 
-    Private Sub moire_image_file_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
-        Paint_Image(e)
+    Private Sub MoireImageFilePaint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+        PaintImage(e)
     End Sub
 
-    Private Sub Paint_Image(e As PaintEventArgs)
+    Private Sub PaintImage(e As PaintEventArgs)
         If _image IsNot Nothing Then
             Dim width As Integer = Me.Width
             Dim height As Integer = Me.Height
@@ -111,45 +110,13 @@ Public Class moire_image_file
         End If
     End Sub
 
-    Private Sub moire_image_file_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+    Private Sub MoireImageFileResize(sender As Object, e As EventArgs) Handles Me.Resize
         Me.Invalidate()
     End Sub
-End Class
 
-Public Class mif_data
-    Private _image_name As String
-    Private _test As New Dictionary(Of String, String)
-    Private _image_date As Date
-    Public Sub New()
-        _test.Add("Hello", "World")
-        _test.Add("TEST2", "TEST2")
-    End Sub
-
-    Public Property image_name As String
-        Get
-            Return _image_name
-        End Get
-        Set(value As String)
-            _image_name = value
-        End Set
-    End Property
-
-    Public Property test As Dictionary(Of String, String)
-        Get
-            Return _test
-        End Get
-        Set(value As Dictionary(Of String, String))
-            _test = value
-        End Set
-    End Property
-
-    Public Property image_date As String
-        Get
-            Return _image_date
-        End Get
-        Set(value As String)
-            _image_date = value
-        End Set
-    End Property
+    Private Function ResizeImage(originalImage As Image, new_width As Integer, new_height As Integer) As Image
+        ' This is also to create the thumbnail
+        'Dim new_bitmap As New Bitmap()
+    End Function
 
 End Class

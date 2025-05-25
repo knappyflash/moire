@@ -4,7 +4,7 @@
 ''' </summary>
 ''' 
 
-Public Class ioListener
+Public Class IoListener
 
     Private Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Integer) As Short
 

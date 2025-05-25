@@ -1,0 +1,49 @@
+* GENERAL NAMING GUIDELINES
+-	Use PascalCase for class names and function names (ScreenshotCapture, CreateThumbnail).
+
+-	Use camelCase for local variables and parameters (imagePath, thumbWidth).
+
+_   Global variables use leading underscroe( _ ).
+
+-	Use prefixes sparingly(btnStart, lblStatus), Instead make self explanatory like (StartButton, StatusLabel).
+
+*VARIABLES & CONSTANTS
+-   Be descriptive: capturedImage instead of img.
+
+-	Boolean variables should start with is, has, or can (isClicked, hasFocus).
+
+-	Use ALL_CAPS for constants (MAX_WIDTH, DEFAULT_FORMAT).
+
+*FUNCTIONS & METHODS
+
+-   Name functions verb-first to describe their action (GetImageData, SaveScreenshot).
+
+-	Keep function names concise but meaningful (CreateOverlay, DetectMouseClick).
+
+-	Avoid unnecessary prefixes like Func_ or Method_.
+
+*CLASSES & OBJECTS
+-	Class names should be singular and descriptive (ScreenshotManager, MouseTracker).
+
+-	Interfaces start with I (IMouseHandler, ICaptureSource).
+
+-	Events should use past-tense verbs (ScreenshotSaved, MouseReleased).
+
+*COLLECTIONS & ARRAYS
+-	Use plural names (capturedScreenshots, openForms).
+
+-	Dictionaries should indicate key-value pairing (imageCache, screenIndexes).
+
+*EVENT HANDLERS
+-	Follow the {Object}_{Event} pattern (btnCapture_Click, Form_Load).
+
+-	Prefer explicit event names over generic (Mouse_Down rather than Event_Handler).
+
+*FILE HANDLING & CUSTOM FORMATS
+-	Since you’re working on .mif file formats, ensure clarity in naming embedded components:
+
+-	MifFileWriter
+
+-	ParseMifMetadata
+
+-	ExtractJsonFromMif

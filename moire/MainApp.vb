@@ -1,10 +1,10 @@
 ﻿Imports System.IO
 Imports System.Runtime.InteropServices
 
-Public Class MAIN_APP_FORM
+Public Class MainApp
 
-    Private _ScreenCapture As New SCREEN_CAPTURE_FORM
-    Private _mif As New moire_image_file
+    Private _ScreenCapture As New ScreenCapture
+    Private _mif As New MoireImage
     Private Sub MAIN_APP_FORM_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         InitMe()
@@ -44,7 +44,7 @@ Public Class MAIN_APP_FORM
     End Sub
 
     Private Sub Start_Screenshot()
-        _ScreenCapture = New SCREEN_CAPTURE_FORM
+        _ScreenCapture = New ScreenCapture
         _mif.ScreenCapture = _ScreenCapture
         _ScreenCapture.Show()
     End Sub

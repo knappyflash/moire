@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT
+Partial Class MoireImage
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,7 +24,7 @@ Partial Class FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT
     Private Sub InitializeComponent()
         Me.SuspendLayout()
         '
-        'FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT
+        'moire_image_file
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -34,12 +34,10 @@ Partial Class FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT"
+        Me.Name = "moire_image_file"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
-        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
-        Me.Text = "FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT"
-        Me.TopMost = True
+        Me.Text = "moire_image_file"
         Me.ResumeLayout(False)
 
     End Sub

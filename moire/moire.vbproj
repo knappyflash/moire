@@ -99,28 +99,29 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.Designer.vb">
-      <DependentUpon>FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.vb</DependentUpon>
+    <Compile Include="WindowScreenFreezer.Designer.vb">
+      <DependentUpon>WindowScreenFreezer.vb</DependentUpon>
     </Compile>
-    <Compile Include="FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.vb">
+    <Compile Include="WindowScreenFreezer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ioListener.Designer.vb">
-      <DependentUpon>ioListener.vb</DependentUpon>
+    <Compile Include="IoListener.Designer.vb">
+      <DependentUpon>IoListener.vb</DependentUpon>
     </Compile>
-    <Compile Include="ioListener.vb">
+    <Compile Include="IoListener.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MAIN_APP_FORM.Designer.vb">
-      <DependentUpon>MAIN_APP_FORM.vb</DependentUpon>
+    <Compile Include="MainApp.Designer.vb">
+      <DependentUpon>MainApp.vb</DependentUpon>
     </Compile>
-    <Compile Include="MAIN_APP_FORM.vb">
+    <Compile Include="MainApp.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="moire_image_file.Designer.vb">
-      <DependentUpon>moire_image_file.vb</DependentUpon>
+    <Compile Include="MifData.vb" />
+    <Compile Include="MoireImage.Designer.vb">
+      <DependentUpon>MoireImage.vb</DependentUpon>
     </Compile>
-    <Compile Include="moire_image_file.vb">
+    <Compile Include="MoireImage.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -134,10 +135,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SCREEN_CAPTURE_FORM.Designer.vb">
-      <DependentUpon>SCREEN_CAPTURE_FORM.vb</DependentUpon>
+    <Compile Include="ScreenCapture.Designer.vb">
+      <DependentUpon>ScreenCapture.vb</DependentUpon>
     </Compile>
-    <Compile Include="SCREEN_CAPTURE_FORM.vb">
+    <Compile Include="ScreenCapture.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
@@ -145,17 +146,17 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.resx">
-      <DependentUpon>FREEZE_WINDOW_SCREEN_IMAGE_FORM_OBJECT.vb</DependentUpon>
+    <EmbeddedResource Include="WindowScreenFreezer.resx">
+      <DependentUpon>WindowScreenFreezer.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ioListener.resx">
-      <DependentUpon>ioListener.vb</DependentUpon>
+    <EmbeddedResource Include="IoListener.resx">
+      <DependentUpon>IoListener.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MAIN_APP_FORM.resx">
-      <DependentUpon>MAIN_APP_FORM.vb</DependentUpon>
+    <EmbeddedResource Include="MainApp.resx">
+      <DependentUpon>MainApp.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="moire_image_file.resx">
-      <DependentUpon>moire_image_file.vb</DependentUpon>
+    <EmbeddedResource Include="MoireImage.resx">
+      <DependentUpon>MoireImage.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -163,8 +164,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SCREEN_CAPTURE_FORM.resx">
-      <DependentUpon>SCREEN_CAPTURE_FORM.vb</DependentUpon>
+    <EmbeddedResource Include="ScreenCapture.resx">
+      <DependentUpon>ScreenCapture.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CodingGuidelines.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

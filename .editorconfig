@@ -1,0 +1,35 @@
+# Naming conventions for VB.NET
+root = true
+
+[*.vb]
+
+# Use PascalCase for classes
+dotnet_naming_rule.PascalCaseForClasses.symbols = classes
+dotnet_naming_rule.PascalCaseForClasses.style = pascal_case
+dotnet_naming_rule.PascalCaseForClasses.severity = error
+
+# Use PascalCase for properties
+dotnet_naming_rule.PascalCaseForProperties.symbols = properties
+dotnet_naming_rule.PascalCaseForProperties.style = pascal_case
+dotnet_naming_rule.PascalCaseForProperties.severity = error
+
+# Use PascalCase for methods
+dotnet_naming_rule.PascalCaseForMethods.symbols = methods
+dotnet_naming_rule.PascalCaseForMethods.style = pascal_case
+dotnet_naming_rule.PascalCaseForMethods.severity = warning
+
+# Use camelCase for local variables
+dotnet_naming_rule.CamelCaseForVariables.symbols = variables
+dotnet_naming_rule.CamelCaseForVariables.style = camel_case
+dotnet_naming_rule.CamelCaseForVariables.severity = warning
+
+# Use camelCase for method parameters
+dotnet_naming_rule.CamelCaseForParameters.symbols = parameters
+dotnet_naming_rule.CamelCaseForParameters.style = camel_case
+dotnet_naming_rule.CamelCaseForParameters.severity = warning
+
+# Boolean variables should start with 'is', 'has', or 'can'
+dotnet_naming_rule.BooleanPrefix.symbols = variables
+dotnet_naming_rule.BooleanPrefix.style = camel_case
+dotnet_naming_rule.BooleanPrefix.required_prefix = is_, has_, can_
+dotnet_naming_rule.BooleanPrefix.severity = warning
