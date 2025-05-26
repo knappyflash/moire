@@ -119,4 +119,16 @@ Public Class MoireImage
         'Dim new_bitmap As New Bitmap()
     End Function
 
+    Private Sub MoireImage_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp
+        If e.Button = e.Button.Right Then
+            ContextMenuStrip1.Show()
+            ContextMenuStrip1.Left = MousePosition.X
+            ContextMenuStrip1.Top = MousePosition.Y
+        End If
+    End Sub
+
+    Private Sub HelloWorldToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelloWorldToolStripMenuItem.Click
+        MsgBox($"{Now} Hello World!")
+    End Sub
+
 End Class

@@ -61,26 +61,25 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to General Naming Guidelines
-        '''Use PascalCase for class names and function names (ScreenshotCapture, CreateThumbnail).
+        '''  Looks up a localized string similar to * GENERAL NAMING GUIDELINES
+        '''-	Use PascalCase for class names and function names (ScreenshotCapture, CreateThumbnail).
         '''
-        '''Use camelCase for local variables and parameters (imagePath, thumbWidth).
+        '''-	Use camelCase for local variables and parameters (imagePath, thumbWidth).
         '''
-        '''Use prefixes sparingly for clarity (btnStart, lblStatus).
+        '''_   Global variables use leading underscroe( _ ).
         '''
-        '''Variables &amp; Constants
-        '''Be descriptive: capturedImage instead of img.
+        '''-	Use prefixes sparingly(btnStart, lblStatus), Instead make self explanatory like (StartButton, StatusLabel).
         '''
-        '''Boolean variables should start with is, has, or can (isClicked, hasFocus).
+        '''*VARIABLES &amp; CONSTANTS
+        '''-   Be descriptive: capturedImage instead of img.
         '''
-        '''Use ALL_CAPS for constants (MAX_WIDTH, DEFAULT_FORMAT).
+        '''-	Boolean variables should start with is, has, or can (isClicked, hasFocus).
         '''
-        '''Functions &amp; Methods
-        '''Name functions verb-first to describe the [rest of string was truncated]&quot;;.
+        '''-	 [rest of string was truncated]&quot;;.
         '''</summary>
-        Friend ReadOnly Property CodingNamingConventions() As String
+        Friend ReadOnly Property CodingGuidelines() As String
             Get
-                Return ResourceManager.GetString("CodingNamingConventions", resourceCulture)
+                Return ResourceManager.GetString("CodingGuidelines", resourceCulture)
             End Get
         End Property
     End Module

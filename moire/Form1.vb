@@ -9,10 +9,10 @@ Public Class Form1
 
         ioListener.Timer1.Start()
 
-        MAIN_APP_FORM.TopLevel = False
-        Me.Controls.Add(MAIN_APP_FORM)
-        MAIN_APP_FORM.Dock = DockStyle.Fill
-        MAIN_APP_FORM.Show()
+        MainApp.TopLevel = False
+        Me.Controls.Add(MainApp)
+        MainApp.Dock = DockStyle.Fill
+        MainApp.Show()
 
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
