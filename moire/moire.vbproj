@@ -183,16 +183,13 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\CodingGuidelines.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="bin\Debug\icon.ico" />
+    <None Include="bin\Debug\icon.png" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
