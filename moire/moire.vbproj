@@ -102,6 +102,12 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Thumbnail.Designer.vb">
+      <DependentUpon>Thumbnail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Thumbnail.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="WindowScreenFreezer.Designer.vb">
       <DependentUpon>WindowScreenFreezer.vb</DependentUpon>
     </Compile>
@@ -148,6 +154,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Thumbnail.resx">
+      <DependentUpon>Thumbnail.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WindowScreenFreezer.resx">
       <DependentUpon>WindowScreenFreezer.vb</DependentUpon>

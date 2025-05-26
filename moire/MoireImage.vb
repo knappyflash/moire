@@ -31,7 +31,6 @@ Public Class MoireImage
         End Set
     End Property
 
-
     Private Sub MoireImageLoad(sender As Object, e As EventArgs) Handles MyBase.Load
 
     End Sub
@@ -93,6 +92,7 @@ Public Class MoireImage
                 _jsonString = System.Text.Encoding.UTF8.GetString(jsonBytes)
             End Using
         End Using
+        Me.Invalidate()
     End Sub
 
     Private Sub HandleImageAvailable(img)

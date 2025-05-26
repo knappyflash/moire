@@ -34,7 +34,7 @@ Partial Class MainApp
         Me.PnlMIF.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PnlMIF.Location = New System.Drawing.Point(15, 37)
         Me.PnlMIF.Name = "PnlMIF"
-        Me.PnlMIF.Size = New System.Drawing.Size(773, 281)
+        Me.PnlMIF.Size = New System.Drawing.Size(773, 261)
         Me.PnlMIF.TabIndex = 1
         '
         'FlowLayoutPanelTimeLine
@@ -43,9 +43,9 @@ Partial Class MainApp
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanelTimeLine.AutoScroll = True
         Me.FlowLayoutPanelTimeLine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.FlowLayoutPanelTimeLine.Location = New System.Drawing.Point(15, 324)
+        Me.FlowLayoutPanelTimeLine.Location = New System.Drawing.Point(15, 304)
         Me.FlowLayoutPanelTimeLine.Name = "FlowLayoutPanelTimeLine"
-        Me.FlowLayoutPanelTimeLine.Size = New System.Drawing.Size(773, 114)
+        Me.FlowLayoutPanelTimeLine.Size = New System.Drawing.Size(773, 134)
         Me.FlowLayoutPanelTimeLine.TabIndex = 2
         Me.FlowLayoutPanelTimeLine.WrapContents = False
         '

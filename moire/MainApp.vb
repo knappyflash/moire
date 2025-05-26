@@ -64,55 +64,28 @@ Public Class MainApp
         FlowLayoutPanelTimeLine.Controls.Clear()
 
         For Each file As String In files
-            Dim tempMif As New MoireImage
-            Dim randomColor As Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256))
-            Dim thumbnailPanel As New Panel
-            Dim thumbnailPictureBox As New PictureBox
-            Dim thumbnailName As String = Path.GetFileName(file)
-            Dim thumbnailPanelHeight As Integer = FlowLayoutPanelTimeLine.Height * 0.75
-            Dim thumbnailPanelWidth As Integer = thumbnailPanelHeight * 1.9
-            Dim thumbnailLabel As New Label
-
-            thumbnailName = thumbnailName.Replace(".mif", "")
-
-            FlowLayoutPanelTimeLine.Controls.Add(thumbnailPanel)
-            thumbnailPanel.Controls.Add(thumbnailPictureBox)
-            thumbnailPanel.Controls.Add(thumbnailLabel)
-
-            thumbnailLabel.Text = thumbnailName
-
-            tempMif.ReadMifFile(file)
-
-            thumbnailPanel.Name = thumbnailName
-            thumbnailPanel.BackColor = Color.White
-            thumbnailPanel.BorderStyle = BorderStyle.FixedSingle
-            thumbnailPanel.Height = thumbnailPanelHeight
-            thumbnailPanel.Width = thumbnailPanelWidth
-
-            thumbnailPictureBox.Name = thumbnailName
-            thumbnailPictureBox.BackColor = Color.White
-            thumbnailPictureBox.BorderStyle = BorderStyle.FixedSingle
-            thumbnailPictureBox.SizeMode = PictureBoxSizeMode.Zoom
-            Console.WriteLine($"{thumbnailPictureBox.Name}: thumbnailPictureBox.Width:{thumbnailPictureBox.Width}, thumbnailPictureBox.Height:{thumbnailPictureBox.Height}")
-
-            thumbnailPictureBox.Image = tempMif.Thumbnail
-
-            thumbnailLabel.Top = thumbnailPanelHeight - thumbnailLabel.Height
-            thumbnailLabel.Width = thumbnailPanel.Width
-            thumbnailPictureBox.Height = thumbnailPanelHeight - thumbnailLabel.Height
-
-            thumbnailLabel.AutoSize = True
-            thumbnailLabel.TextAlign = ContentAlignment.MiddleCenter
-            thumbnailLabel.Left = (thumbnailPanel.Width - thumbnailLabel.Width) \ 2
-
-            thumbnailPictureBox.Left = (thumbnailPanel.Width - thumbnailPictureBox.Width) \ 2
-
+            Dim thumbnail = New Thumbnail
+            thumbnail.ReadMifFile(file)
+            thumbnail.TopLevel = False
+            FlowLayoutPanelTimeLine.Controls.Add(thumbnail)
+            thumbnail.Show()
+            AddHandler thumbnail.Thumbnail_Selected, AddressOf HandleThumbnailSelected
+            If file = files(0) Then thumbnail.IsThumbnailSelected = True
         Next
 
     End Sub
 
     Private Sub HandleMoireImageCreated()
         LoadTimeline()
+    End Sub
+
+    Private Sub HandleThumbnailSelected(mifPath As String)
+        _mif.ReadMifFile(mifPath)
+        For Each tn As Thumbnail In FlowLayoutPanelTimeLine.Controls
+            If tn.mifFilePath <> mifPath Then
+                tn.IsThumbnailSelected = False
+            End If
+        Next
     End Sub
 
 End Class
